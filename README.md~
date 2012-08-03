@@ -1,0 +1,5 @@
+copy-paste
+==========
+
+sync two environments.
+2 apikeys are provided. For each deployment from one account, the blueprint is exported and all schemas, relations and canned lists are created in a (newly created) blueprint in the se
