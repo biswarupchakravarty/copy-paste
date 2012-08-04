@@ -1,0 +1,517 @@
+var dump = {
+  "Blueprints": {
+    "__D_357_DeploymentsBlueprint": {
+      "Attributes": [],
+      "CreatedBy": "demoadmin ",
+      "Description": "Blueprint B2",
+      "Id": 380,
+      "LastUpdatedBy": "demoadmin ",
+      "Name": "__D_357_DeploymentsBlueprint",
+      "Tags": null,
+      "UtcDateCreated": "/Date(1342434137000+0000)/",
+      "UtcLastUpdatedDate": "/Date(1342434137000+0000)/",
+      "Schemas": {
+        "File": {
+          "ArticleCount": 2,
+          "Attributes": [],
+          "CreatedBy": "System",
+          "Description": "This schema is a system generated schema and used for file/media storage. It cannot be deleted/edited because doing so will break the functinality of file/media upload/download.",
+          "Id": 3441,
+          "LastUpdatedBy": "System",
+          "Name": "File",
+          "Properties": [
+            {
+              "AreValuesFromCannedList": false,
+              "Attributes": [],
+              "CannedListId": 0,
+              "DataType": "string",
+              "DefaultValue": null,
+              "Description": "File name of the uploaded file",
+              "Encryption": 0,
+              "Formatter": null,
+              "HasDefaultValue": false,
+              "Id": 9070,
+              "IsImmutable": false,
+              "IsMandatory": true,
+              "IsMultiValued": false,
+              "IsUnique": false,
+              "MaxLength": 0,
+              "MinLength": 0,
+              "Name": "FileName",
+              "Range": null,
+              "RegexValidator": null
+            },
+            {
+              "AreValuesFromCannedList": false,
+              "Attributes": [],
+              "CannedListId": 0,
+              "DataType": "blob",
+              "DefaultValue": null,
+              "Description": "Download url of the uploaded file",
+              "Encryption": 0,
+              "Formatter": null,
+              "HasDefaultValue": false,
+              "Id": 9071,
+              "IsImmutable": false,
+              "IsMandatory": false,
+              "IsMultiValued": false,
+              "IsUnique": false,
+              "MaxLength": 0,
+              "MinLength": 0,
+              "Name": "Url",
+              "Range": null,
+              "RegexValidator": null
+            },
+            {
+              "AreValuesFromCannedList": false,
+              "Attributes": [],
+              "CannedListId": 0,
+              "DataType": "string",
+              "DefaultValue": null,
+              "Description": "Content type of the uploaded file",
+              "Encryption": 0,
+              "Formatter": null,
+              "HasDefaultValue": false,
+              "Id": 9072,
+              "IsImmutable": false,
+              "IsMandatory": true,
+              "IsMultiValued": false,
+              "IsUnique": false,
+              "MaxLength": 0,
+              "MinLength": 0,
+              "Name": "ContentType",
+              "Range": null,
+              "RegexValidator": null
+            },
+            {
+              "AreValuesFromCannedList": false,
+              "Attributes": [],
+              "CannedListId": 0,
+              "DataType": "long",
+              "DefaultValue": null,
+              "Description": "Size of the uploaded file in bits",
+              "Encryption": 0,
+              "Formatter": null,
+              "HasDefaultValue": false,
+              "Id": 9073,
+              "IsImmutable": false,
+              "IsMandatory": true,
+              "IsMultiValued": false,
+              "IsUnique": false,
+              "MaxLength": 0,
+              "MinLength": 0,
+              "Name": "Size",
+              "Range": null,
+              "RegexValidator": null
+            }
+          ],
+          "PropertiesCount": 4,
+          "Tags": [
+            "FileUpload",
+            "System"
+          ],
+          "UtcDateCreated": "/Date(1342434137000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342434137000+0000)/",
+          "Version": null
+        },
+        "USer": {
+          "ArticleCount": 0,
+          "Attributes": [
+            {
+              "Key": "property.groups",
+              "Value": ""
+            },
+            {
+              "Key": "property.positions",
+              "Value": ""
+            },
+            {
+              "Key": "property.identifier",
+              "Value": ""
+            }
+          ],
+          "CreatedBy": "demoadmin ",
+          "Description": "This represents USer schema.",
+          "Id": 3442,
+          "LastUpdatedBy": "demoadmin ",
+          "Name": "USer",
+          "Properties": [],
+          "PropertiesCount": 0,
+          "Tags": null,
+          "UtcDateCreated": "/Date(1342434138000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342434138000+0000)/",
+          "Version": null
+        },
+        "LEad": {
+          "ArticleCount": 0,
+          "Attributes": [
+            {
+              "Key": "property.groups",
+              "Value": ""
+            },
+            {
+              "Key": "property.positions",
+              "Value": ""
+            },
+            {
+              "Key": "property.identifier",
+              "Value": ""
+            }
+          ],
+          "CreatedBy": "demoadmin ",
+          "Description": "This represents LEad schema.",
+          "Id": 3443,
+          "LastUpdatedBy": "demoadmin ",
+          "Name": "LEad",
+          "Properties": [],
+          "PropertiesCount": 0,
+          "Tags": null,
+          "UtcDateCreated": "/Date(1342434138000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342434138000+0000)/",
+          "Version": null
+        },
+        "Comment": {
+          "ArticleCount": 0,
+          "Attributes": [
+            {
+              "Key": "property.groups",
+              "Value": ""
+            },
+            {
+              "Key": "property.positions",
+              "Value": ""
+            },
+            {
+              "Key": "property.identifier",
+              "Value": ""
+            }
+          ],
+          "CreatedBy": "demoadmin ",
+          "Description": "This represents Comment schema.",
+          "Id": 3444,
+          "LastUpdatedBy": "demoadmin ",
+          "Name": "Comment",
+          "Properties": [],
+          "PropertiesCount": 0,
+          "Tags": null,
+          "UtcDateCreated": "/Date(1342434138000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342434138000+0000)/",
+          "Version": null
+        }
+      }
+    },
+    "__D_362_DeploymentsBlueprint": {
+      "Attributes": [],
+      "CreatedBy": "demoadmin ",
+      "Description": "Blueprint social",
+      "Id": 389,
+      "LastUpdatedBy": "demoadmin ",
+      "Name": "__D_362_DeploymentsBlueprint",
+      "Tags": null,
+      "UtcDateCreated": "/Date(1342671720000+0000)/",
+      "UtcLastUpdatedDate": "/Date(1342671720000+0000)/",
+      "Relations": {
+        "ProfileComment": {
+          "Attributes": [
+            {
+              "Key": "property.groups",
+              "Value": ""
+            },
+            {
+              "Key": "property.positions",
+              "Value": ""
+            },
+            {
+              "Key": "property.identifier",
+              "Value": ""
+            }
+          ],
+          "ConnectionCount": 0,
+          "CreatedBy": "demoadmin ",
+          "Description": "This represents Comment relation.",
+          "EndPointA": {
+            "Label": "Profile",
+            "Multiplicity": -1,
+            "SchemaId": 3471
+          },
+          "EndPointB": {
+            "Label": "Comment",
+            "Multiplicity": -1,
+            "SchemaId": 3473
+          },
+          "Id": 2245,
+          "LastUpdatedBy": "demoadmin ",
+          "Name": "ProfileComment",
+          "Properties": [],
+          "PropertiesCount": 0,
+          "Tags": null,
+          "UtcDateCreated": "/Date(1342671721000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342671721000+0000)/"
+        },
+        "PhotoComment": {
+          "Attributes": [
+            {
+              "Key": "property.groups",
+              "Value": ""
+            },
+            {
+              "Key": "property.positions",
+              "Value": ""
+            },
+            {
+              "Key": "property.identifier",
+              "Value": ""
+            }
+          ],
+          "ConnectionCount": 0,
+          "CreatedBy": "demoadmin ",
+          "Description": "This represents PhotoComment relation.",
+          "EndPointA": {
+            "Label": "Photo",
+            "Multiplicity": -1,
+            "SchemaId": 3472
+          },
+          "EndPointB": {
+            "Label": "Comment",
+            "Multiplicity": -1,
+            "SchemaId": 3473
+          },
+          "Id": 2246,
+          "LastUpdatedBy": "demoadmin ",
+          "Name": "PhotoComment",
+          "Properties": [],
+          "PropertiesCount": 0,
+          "Tags": null,
+          "UtcDateCreated": "/Date(1342671721000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342671721000+0000)/"
+        },
+        "ProfilePicture": {
+          "Attributes": [
+            {
+              "Key": "property.groups",
+              "Value": ""
+            },
+            {
+              "Key": "property.positions",
+              "Value": ""
+            },
+            {
+              "Key": "property.identifier",
+              "Value": ""
+            }
+          ],
+          "ConnectionCount": 0,
+          "CreatedBy": "demoadmin ",
+          "Description": "This represents ProfilePicture relation.",
+          "EndPointA": {
+            "Label": "Profile",
+            "Multiplicity": -1,
+            "SchemaId": 3471
+          },
+          "EndPointB": {
+            "Label": "File",
+            "Multiplicity": -1,
+            "SchemaId": 3470
+          },
+          "Id": 2247,
+          "LastUpdatedBy": "demoadmin ",
+          "Name": "ProfilePicture",
+          "Properties": [],
+          "PropertiesCount": 0,
+          "Tags": null,
+          "UtcDateCreated": "/Date(1342671721000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342671721000+0000)/"
+        }
+      },
+      "Schemas": {
+        "File": {
+          "ArticleCount": 0,
+          "Attributes": [],
+          "CreatedBy": "System",
+          "Description": "This schema is a system generated schema and used for file/media storage. It cannot be deleted/edited because doing so will break the functinality of file/media upload/download.",
+          "Id": 3470,
+          "LastUpdatedBy": "System",
+          "Name": "File",
+          "Properties": [
+            {
+              "AreValuesFromCannedList": false,
+              "Attributes": [],
+              "CannedListId": 0,
+              "DataType": "string",
+              "DefaultValue": null,
+              "Description": "File name of the uploaded file",
+              "Encryption": 0,
+              "Formatter": null,
+              "HasDefaultValue": false,
+              "Id": 9128,
+              "IsImmutable": false,
+              "IsMandatory": true,
+              "IsMultiValued": false,
+              "IsUnique": false,
+              "MaxLength": 0,
+              "MinLength": 0,
+              "Name": "FileName",
+              "Range": null,
+              "RegexValidator": null
+            },
+            {
+              "AreValuesFromCannedList": false,
+              "Attributes": [],
+              "CannedListId": 0,
+              "DataType": "blob",
+              "DefaultValue": null,
+              "Description": "Download url of the uploaded file",
+              "Encryption": 0,
+              "Formatter": null,
+              "HasDefaultValue": false,
+              "Id": 9129,
+              "IsImmutable": false,
+              "IsMandatory": false,
+              "IsMultiValued": false,
+              "IsUnique": false,
+              "MaxLength": 0,
+              "MinLength": 0,
+              "Name": "Url",
+              "Range": null,
+              "RegexValidator": null
+            },
+            {
+              "AreValuesFromCannedList": false,
+              "Attributes": [],
+              "CannedListId": 0,
+              "DataType": "string",
+              "DefaultValue": null,
+              "Description": "Content type of the uploaded file",
+              "Encryption": 0,
+              "Formatter": null,
+              "HasDefaultValue": false,
+              "Id": 9130,
+              "IsImmutable": false,
+              "IsMandatory": true,
+              "IsMultiValued": false,
+              "IsUnique": false,
+              "MaxLength": 0,
+              "MinLength": 0,
+              "Name": "ContentType",
+              "Range": null,
+              "RegexValidator": null
+            },
+            {
+              "AreValuesFromCannedList": false,
+              "Attributes": [],
+              "CannedListId": 0,
+              "DataType": "long",
+              "DefaultValue": null,
+              "Description": "Size of the uploaded file in bits",
+              "Encryption": 0,
+              "Formatter": null,
+              "HasDefaultValue": false,
+              "Id": 9131,
+              "IsImmutable": false,
+              "IsMandatory": true,
+              "IsMultiValued": false,
+              "IsUnique": false,
+              "MaxLength": 0,
+              "MinLength": 0,
+              "Name": "Size",
+              "Range": null,
+              "RegexValidator": null
+            }
+          ],
+          "PropertiesCount": 4,
+          "Tags": [
+            "FileUpload",
+            "System"
+          ],
+          "UtcDateCreated": "/Date(1342671720000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342671720000+0000)/",
+          "Version": null
+        },
+        "Profile": {
+          "ArticleCount": 0,
+          "Attributes": [
+            {
+              "Key": "property.groups",
+              "Value": ""
+            },
+            {
+              "Key": "property.positions",
+              "Value": ""
+            },
+            {
+              "Key": "property.identifier",
+              "Value": ""
+            }
+          ],
+          "CreatedBy": "demoadmin ",
+          "Description": "This represents Profile schema.",
+          "Id": 3471,
+          "LastUpdatedBy": "demoadmin ",
+          "Name": "Profile",
+          "Properties": [],
+          "PropertiesCount": 0,
+          "Tags": null,
+          "UtcDateCreated": "/Date(1342671721000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342671721000+0000)/",
+          "Version": null
+        },
+        "Photo": {
+          "ArticleCount": 0,
+          "Attributes": [
+            {
+              "Key": "property.groups",
+              "Value": ""
+            },
+            {
+              "Key": "property.positions",
+              "Value": ""
+            },
+            {
+              "Key": "property.identifier",
+              "Value": ""
+            }
+          ],
+          "CreatedBy": "demoadmin ",
+          "Description": "This represents Photo schema.",
+          "Id": 3472,
+          "LastUpdatedBy": "demoadmin ",
+          "Name": "Photo",
+          "Properties": [],
+          "PropertiesCount": 0,
+          "Tags": null,
+          "UtcDateCreated": "/Date(1342671721000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342671721000+0000)/",
+          "Version": null
+        },
+        "Comment": {
+          "ArticleCount": 0,
+          "Attributes": [
+            {
+              "Key": "property.groups",
+              "Value": ""
+            },
+            {
+              "Key": "property.positions",
+              "Value": ""
+            },
+            {
+              "Key": "property.identifier",
+              "Value": ""
+            }
+          ],
+          "CreatedBy": "demoadmin ",
+          "Description": "This represents Commenet schema.",
+          "Id": 3473,
+          "LastUpdatedBy": "demoadmin ",
+          "Name": "Comment",
+          "Properties": [],
+          "PropertiesCount": 0,
+          "Tags": null,
+          "UtcDateCreated": "/Date(1342671721000+0000)/",
+          "UtcLastUpdatedDate": "/Date(1342671721000+0000)/",
+          "Version": null
+        }
+      }
+    }
+  }
+}
