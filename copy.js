@@ -1,7 +1,7 @@
 var http = require('http'), settings = require('./settings.js').settings, fs = require('fs')
 
-var session = null
-var dump = {Blueprints: {}}
+var session = {}
+var dump = {Accounts: {}}
 var exports = []
 var counters = {}
 
@@ -29,10 +29,12 @@ var setupSession = function(apikey) {
 			if (arguments.length > 0) result += arguments[0]
 			var sessionResult = JSON.parse(result)
 			
-			session = sessionResult.Session.SessionKey
+			session[apikey] = sessionResult.Session.SessionKey
 			console.log('-> Created session for source account.')
 			
-			fetchDeployments()
+			dump.Accounts[apikey] = {Blueprints: {}}
+			counters[apikey] = {};
+			fetchDeployments(apikey)
 		})
 	})
 	
@@ -40,9 +42,9 @@ var setupSession = function(apikey) {
 	request.end()
 }
 
-var fetchDeployments = function() {
+var fetchDeployments = function(apikey) {
 	var options = settings.source()
-	options.path += 'deployment.svc/find/all?session=' + session
+	options.path += 'deployment.svc/find/all?session=' + session[apikey]
 	options.headers = {
 		'Content-Type': 'application/json'
 	}
@@ -60,16 +62,16 @@ var fetchDeployments = function() {
 			
 			for (var x=0;x<result.Deployments.length;x=x+1) {
 				console.log('---> Fetching blueprint for deployment: ' + result.Deployments[x].Name)
-				fetchBlueprint(result.Deployments[x].BlueprintId)
+				fetchBlueprint(apikey, result.Deployments[x].BlueprintId)
 			}
 		})
 	})
 	request.end()
 }
 
-var fetchBlueprint = function(bId) {
+var fetchBlueprint = function(apikey, bId) {
 	var options = settings.source()
-	options.path += 'blueprint.svc/' + bId + '?session=' + session
+	options.path += 'blueprint.svc/' + bId + '?session=' + session[apikey]
 	options.method = 'GET'
 	
 	var request = http.request(options, function(res) {
@@ -82,10 +84,11 @@ var fetchBlueprint = function(bId) {
 			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			
-			dump.Blueprints[result.Blueprint.Name] = result.Blueprint
+			if (!result.Blueprint) return
+			dump.Accounts[apikey].Blueprints[result.Blueprint.Name] = result.Blueprint
 			
 			// initialize the counts
-			counters[result.Blueprint.Name] = {
+			counters[apikey][result.Blueprint.Name] = {
 				schemaTotal: 0,
 				schemaDone: 0,
 				relationTotal: 0,
@@ -96,23 +99,23 @@ var fetchBlueprint = function(bId) {
 			
 			// fetch the schemas 
 			console.log('------> Fetching schemas for blueprint: ' + result.Blueprint.Name)
-			fetchSchemas(result.Blueprint.Id, result.Blueprint.Name)
+			fetchSchemas(apikey, result.Blueprint.Id, result.Blueprint.Name)
 			
 			// fetch the relations
 			console.log('------> Fetching relations for blueprint: ' + result.Blueprint.Name)
-			fetchRelations(result.Blueprint.Id, result.Blueprint.Name)
+			fetchRelations(apikey, result.Blueprint.Id, result.Blueprint.Name)
 			
 			// fetch the lists
 			console.log('------> Fetching lists for blueprint: ' + result.Blueprint.Name)
-			fetchLists(result.Blueprint.Id, result.Blueprint.Name)
+			fetchLists(apikey, result.Blueprint.Id, result.Blueprint.Name)
 		})
 	})
 	request.end()
 }
 
-var fetchSchemas = function(bId, bName) {
+var fetchSchemas = function(apikey, bId, bName) {
 	var options = settings.source()
-	options.path += 'blueprint.svc/' + bId + '/contents/schemas?session=' + session
+	options.path += 'blueprint.svc/' + bId + '/contents/schemas?session=' + session[apikey]
 	options.method = 'GET'
 	
 	var request = http.request(options, function(res) {
@@ -125,25 +128,20 @@ var fetchSchemas = function(bId, bName) {
 			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			
-			var schemas = ''
-			counters[bName].schemaTotal = result.Schemas.length
-			sTotal = result.Schemas.length
+			counters[apikey][bName].schemaTotal = result.Schemas.length
 			for (var x=0;x<result.Schemas.length;x=x+1) {
-				schemas += result.Schemas[x].Name + ','
-				
-				if (!dump.Blueprints[bName].Schemas) dump.Blueprints[bName].Schemas = {}
-				dump.Blueprints[bName].Schemas[result.Schemas[x].Name] = result.Schemas[x]
-				
-				fetchSchemaProperties(bId, bName, result.Schemas[x].Name)
+				if (!dump.Accounts[apikey].Blueprints[bName].Schemas) dump.Accounts[apikey].Blueprints[bName].Schemas = {}
+				dump.Accounts[apikey].Blueprints[bName].Schemas[result.Schemas[x].Name] = result.Schemas[x]
+				fetchSchemaProperties(apikey, bId, bName, result.Schemas[x].Name)
 			}
 		})
 	})
 	request.end()
 }
 
-var fetchSchemaProperties = function(bId, bName, sName) {
+var fetchSchemaProperties = function(apikey, bId, bName, sName) {
 	var options = settings.source()
-	options.path += 'schema.svc/' + bId + '/' + sName + '/properties?session=' + session
+	options.path += 'schema.svc/' + bId + '/' + sName + '/properties?session=' + session[apikey]
 	options.method = 'GET'
 	
 	var request = http.request(options, function(res) {
@@ -155,17 +153,17 @@ var fetchSchemaProperties = function(bId, bName, sName) {
 		res.on('end', function() {
 			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
-			dump.Blueprints[bName].Schemas[sName].Properties = result.Properties
-			counters[bName].schemaDone = counters[bName].schemaDone + 1
+			dump.Accounts[apikey].Blueprints[bName].Schemas[sName].Properties = result.Properties
+			counters[apikey][bName].schemaDone = counters[apikey][bName].schemaDone + 1
 			checkAllDone()
 		})
 	})
 	request.end()
 }
 
-var fetchRelations = function(bId, bName) {
+var fetchRelations = function(apikey, bId, bName) {
 	var options = settings.source()
-	options.path += 'blueprint.svc/' + bId + '/contents/relations?session=' + session
+	options.path += 'blueprint.svc/' + bId + '/contents/relations?session=' + session[apikey]
 	options.method = 'GET'
 	
 	var request = http.request(options, function(res) {
@@ -178,24 +176,20 @@ var fetchRelations = function(bId, bName) {
 			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			
-			var relations = ''
-			counters[bName].relationTotal = result.Relations.length
+			counters[apikey][bName].relationTotal = result.Relations.length
 			for (var x=0;x<result.Relations.length;x=x+1) {
-				relations += result.Relations[x].Name + ','
-				
-				if (!dump.Blueprints[bName].Relations) dump.Blueprints[bName].Relations = {}
-				dump.Blueprints[bName].Relations[result.Relations[x].Name] = result.Relations[x]
-				
-				fetchRelationProperties(bId, bName, result.Relations[x].Name)
+				if (!dump.Accounts[apikey].Blueprints[bName].Relations) dump.Accounts[apikey].Blueprints[bName].Relations = {}
+				dump.Accounts[apikey].Blueprints[bName].Relations[result.Relations[x].Name] = result.Relations[x]
+				fetchRelationProperties(apikey, bId, bName, result.Relations[x].Name)
 			}
 		})
 	})
 	request.end()
 }
 
-var fetchRelationProperties = function(bId, bName, rName) {
+var fetchRelationProperties = function(apikey, bId, bName, rName) {
 	var options = settings.source()
-	options.path += 'relation.svc/' + bId + '/' + rName + '/properties?session=' + session
+	options.path += 'relation.svc/' + bId + '/' + rName + '/properties?session=' + session[apikey]
 	options.method = 'GET'
 	
 	var request = http.request(options, function(res) {
@@ -207,17 +201,17 @@ var fetchRelationProperties = function(bId, bName, rName) {
 		res.on('end', function() {
 			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
-			dump.Blueprints[bName].Relations[rName].Properties = result.Properties
-			counters[bName].relationDone = counters[bName].relationDone + 1
+			dump.Accounts[apikey].Blueprints[bName].Relations[rName].Properties = result.Properties
+			counters[apikey][bName].relationDone = counters[apikey][bName].relationDone + 1
 			checkAllDone()
 		})
 	})
 	request.end()
 }
 
-var fetchLists = function(bId, bName) {
+var fetchLists = function(apikey, bId, bName) {
 	var options = settings.source()
-	options.path += 'blueprint.svc/' + bId + '/contents/lists?session=' + session
+	options.path += 'blueprint.svc/' + bId + '/contents/lists?session=' + session[apikey]
 	options.method = 'GET'
 	
 	var request = http.request(options, function(res) {
@@ -230,24 +224,20 @@ var fetchLists = function(bId, bName) {
 			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			
-			var lists = ''
-			counters[bName].listTotal = result.Lists.length
+			counters[apikey][bName].listTotal = result.Lists.length
 			for (var x=0;x<result.Lists.length;x=x+1) {
-				lists += result.Lists[x].Name + ','
-				
-				if (!dump.Blueprints[bName].Lists) dump.Blueprints[bName].Lists = {}
-				dump.Blueprints[bName].Lists[result.Lists[x].Name] = result.Lists[x]
-				
-				fetchListItems(bId, bName, result.Lists[x].Name)
+				if (!dump.Accounts[apikey].Blueprints[bName].Lists) dump.Accounts[apikey].Blueprints[bName].Lists = {}
+				dump.Accounts[apikey].Blueprints[bName].Lists[result.Lists[x].Name] = result.Lists[x]
+				fetchListItems(apikey, bId, bName, result.Lists[x].Name)
 			}
 		})
 	})
 	request.end()
 }
 
-var fetchListItems = function(bId, bName, lName) {
+var fetchListItems = function(apikey, bId, bName, lName) {
 	var options = settings.source()
-	options.path += 'list.svc/' + bId + '/' + lName + '/contents?session=' + session
+	options.path += 'list.svc/' + bId + '/' + lName + '/contents?session=' + session[apikey]
 	options.method = 'GET'
 	
 	var request = http.request(options, function(res) {
@@ -259,8 +249,8 @@ var fetchListItems = function(bId, bName, lName) {
 		res.on('end', function() {
 			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
-			dump.Blueprints[bName].Lists[lName].Items = result.ListItems
-			counters[bName].listDone = counters[bName].listDone + 1
+			dump.Accounts[apikey].Blueprints[bName].Lists[lName].Items = result.ListItems
+			counters[apikey][bName].listDone = counters[apikey][bName].listDone + 1
 			checkAllDone()
 		})
 	})
@@ -268,19 +258,21 @@ var fetchListItems = function(bId, bName, lName) {
 }
 
 var checkAllDone = function() {
-	var completedCount = 0, totalCount = 0
-	for (var bId in counters) {
-		totalCount = totalCount + 1
-		if (counters[bId].schemaTotal == counters[bId].schemaDone && counters[bId].relationTotal == counters[bId].relationDone && counters[bId].listTotal == counters[bId].listDone) {
-			completedCount = completedCount + 1
+	var accTotal = accDone = bTotal = bDone = 0
+	for (var apikey in counters) {
+		accTotal = accTotal + 1
+		for (var bId in counters[apikey]) {
+			bTotal = bTotal + 1
+			if (counters[apikey][bId].schemaTotal == counters[apikey][bId].schemaDone && counters[apikey][bId].relationTotal == counters[apikey][bId].relationDone && counters[apikey][bId].listTotal == counters[apikey][bId].listDone) {
+				bDone = bDone + 1
+			}
+		}
+		if (bTotal == bDone) {
+			accDone = accDone + 1
+			bTotal = bDone = 0
 		}
 	}
-	if (totalCount == completedCount) {
-		exports.push(dump)
-		dump = {Blueprints: {}}
-		tryExit()
-		console.log(JSON.stringify(counters, null, 2))
-	}
+	if (accTotal == accDone) writeDump()
 }
 
 var accountsDone = 0
@@ -288,13 +280,13 @@ var accountsTotal = settings.source().apikeys.length
 var tryExit = function() {
 	accountsTotal = accountsTotal + 1
 	if (accountsTotal == accountsDone) {
-		writeFile()
+		writeDump()
 	}
 }
 
 var writeDump = function() {
-	var dumpString = JSON.stringify(exports, null, 2)
-	fs.writeFile("./export.txt", 'var export = ' + dumpString, function(err) {
+	var dumpString = JSON.stringify(dump, null, 2)
+	fs.writeFile("./dump.txt", 'var dump = ' + dumpString, function(err) {
 		if(err) {
 			console.log(err)
 		} else {
@@ -310,6 +302,5 @@ for (var i=0;i<keys.length;i=i+1) {
 }
 
 
-console.log('\n')
-// setupSession(settings.source().apikey)
 
+console.log('\n')
