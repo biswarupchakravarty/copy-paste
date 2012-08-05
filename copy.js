@@ -57,7 +57,6 @@ var fetchDeployments = function(apikey) {
 			result += chunk
 		})
 		res.on('end', function() {
-			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			
 			for (var x=0;x<result.Deployments.length;x=x+1) {
@@ -81,7 +80,6 @@ var fetchBlueprint = function(apikey, bId) {
 			result += chunk
 		})
 		res.on('end', function() {
-			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			
 			if (!result.Blueprint) return
@@ -125,7 +123,6 @@ var fetchSchemas = function(apikey, bId, bName) {
 			result += chunk
 		})
 		res.on('end', function() {
-			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			
 			counters[apikey][bName].schemaTotal = result.Schemas.length
@@ -151,7 +148,6 @@ var fetchSchemaProperties = function(apikey, bId, bName, sName) {
 			result += chunk 
 		})
 		res.on('end', function() {
-			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			dump.Accounts[apikey].Blueprints[bName].Schemas[sName].Properties = result.Properties
 			counters[apikey][bName].schemaDone = counters[apikey][bName].schemaDone + 1
@@ -173,7 +169,6 @@ var fetchRelations = function(apikey, bId, bName) {
 			result += chunk
 		})
 		res.on('end', function() {
-			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			
 			counters[apikey][bName].relationTotal = result.Relations.length
@@ -199,7 +194,6 @@ var fetchRelationProperties = function(apikey, bId, bName, rName) {
 			result += chunk 
 		})
 		res.on('end', function() {
-			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			dump.Accounts[apikey].Blueprints[bName].Relations[rName].Properties = result.Properties
 			counters[apikey][bName].relationDone = counters[apikey][bName].relationDone + 1
@@ -221,7 +215,6 @@ var fetchLists = function(apikey, bId, bName) {
 			result += chunk
 		})
 		res.on('end', function() {
-			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			
 			counters[apikey][bName].listTotal = result.Lists.length
@@ -247,7 +240,6 @@ var fetchListItems = function(apikey, bId, bName, lName) {
 			result += chunk 
 		})
 		res.on('end', function() {
-			if (arguments.length > 0) result += arguments[0]
 			result = JSON.parse(result)
 			dump.Accounts[apikey].Blueprints[bName].Lists[lName].Items = result.ListItems
 			counters[apikey][bName].listDone = counters[apikey][bName].listDone + 1
@@ -286,7 +278,7 @@ var tryExit = function() {
 
 var writeDump = function() {
 	var dumpString = JSON.stringify(dump, null, 2)
-	fs.writeFile("./dump.txt", 'var dump = ' + dumpString, function(err) {
+	fs.writeFile("./dump.js", dumpString, function(err) {
 		if(err) {
 			console.log(err)
 		} else {
